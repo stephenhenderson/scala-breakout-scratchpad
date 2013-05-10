@@ -30,14 +30,24 @@ abstract case class GameCharacter(
   }
   
   def overlaps(character:GameCharacter) : Boolean = {
-    val xposThis = position.x
-    val yposThis = position.y
+    val leftMost = position.x
+    val rightMost = position.x + length
+    
+    val top = position.y
+    val bottom = position.y + height
+    
     val xposThat = character.position.x
     val yposThat = character.position.y
     
-    return (xposThis >= xposThat && xposThis <= xposThat + character.length 
-        && yposThis >= yposThat && yposThis <= yposThat + character.height)
+    val horizontalOverlap:Boolean = 
+      ((leftMost >= xposThat && leftMost <= xposThat + character.length)
+      ||  (rightMost >= xposThat && rightMost <= xposThat + character.length))
       
+    val verticalOverlap:Boolean = 
+      ((top >= yposThat && top <= yposThat + character.height)
+      ||  (bottom >= yposThat && bottom <= yposThat + character.height))
+    
+    return horizontalOverlap && verticalOverlap
   }
   
   def reverseHorizontalVelocity() : Unit = {
